@@ -35,13 +35,32 @@ void Ball::Update(){
 }
 
 void Ball::collisionCB(GameObject * obj){
-    if(!strcmp(obj->getName(), "PlayerPaddle") && lastCollision != obj->getName()){
-        std::cout<<obj->getName()<<std::endl;
-        SDL_Rect * player = &m_game->GetGameObject("PlayerPaddle")->getRect("PlayerPaddle")->rect;
-        if(m_rects[name].rect.y < (player->y+player->h) && ((m_rects[name].rect.y+m_rects[name].rect.h) > player->y)){
-            m_dir.x*=-1;
-        } else {
-            m_dir.y *=-1;
+    std::cout<<std::endl<<obj->getName()<<std::endl;
+    if(lastCollision != obj->getName()){
+        SDL_Rect * player = &m_game->GetGameObject(obj->getName())->getRect(obj->getName())->rect;
+        int ballHeight = (m_rects[name].rect.y+(m_rects[name].rect.h/2))-player->y;
+        if(ballHeight > player->h+3){
+            std::cout<<"Above: "<<ballHeight<<std::endl;
+            m_rects[name].rect.y = m_rects[name].y = player->y+player->h;
+            if(m_dir.y > 0){
+                m_dir.y *=1.5;
+            } else if(m_dir.y < 0){
+                m_dir.y *=-1;
+            }
+        } else if(ballHeight+3 < 0){
+            std::cout<<"Below: "<<ballHeight<<std::endl;
+            m_rects[name].rect.y = m_rects[name].y = player->y-m_rects[name].rect.h;
+            if(m_dir.y < 0){
+                m_dir.y *=1.5;
+            } else if(m_dir.y > 0){
+                m_dir.y *=-1;
+            }
+        } else{
+            std::cout<<"Middle: "<<ballHeight<<std::endl;
+            int distToMiddle =abs(ballHeight-(player->h/2))*2;
+            std::cout<<"Dist: "<<distToMiddle<<std::endl;
+            m_dir.x *=-1;
+            m_dir.y *= 0.5 + distToMiddle/100.f;
         }
     }
     lastCollision = obj->getName();

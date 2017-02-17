@@ -4,7 +4,7 @@
 
 int main( int argc, char * argv[] ) {
 
-    Game * pong = new Game(0.1);
+    Game * pong = new Game(1);
     if(pong->InitError()) {
         return 1;
     }

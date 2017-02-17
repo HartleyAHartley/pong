@@ -5,6 +5,7 @@
 #include <iostream>
 #include <list>
 #include <chrono>
+#include <memory>
 
 #include "renderer.h"
 #include "types.h"
@@ -85,11 +86,11 @@ public:
     /** Returns GameObject List
      * \return The pointer to the GameObject List
      */
-    std::map<std::string, GameObject*>* GetGameObjects() {return &m_gameobjects;}
+    std::map<std::string, std::shared_ptr<GameObject> >* GetGameObjects() {return &m_gameobjects;}
     /** Returns GameObject
      * \return The pointer to the GameObject
      */
-    GameObject* GetGameObject(std::string id) {return m_gameobjects[id];}
+    std::shared_ptr<GameObject> GetGameObject(std::string id) {return m_gameobjects[id];}
     /** Updates Scene */
     void Draw();
     /** Updates the delta time */
@@ -107,7 +108,7 @@ protected:
 private:
     EventHandler* m_eventHandler; //!< Pointer to eventHandler Object
     Renderer* m_renderer; //!< Member variable "renderer"
-    std::map<std::string, GameObject*> m_gameobjects; //!< List of GameObjects
+    std::map<std::string, std::shared_ptr<GameObject> > m_gameobjects; //!< List of GameObjects
     int m_screenWidth; //!< Member variable "screenWidth"
     int m_screenHeight; //!< Member variable "screenHeight"
     bool m_fullscreen; //!< Member variable "fullscreen"

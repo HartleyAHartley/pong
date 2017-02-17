@@ -22,7 +22,7 @@ void GameObject::collisionCB(GameObject * obj){
 bool GameObject::collision(){
     bool collision = false;
     for(auto const& i : *m_game->GetGameObjects()){
-        if(i.second != this){
+        if(i.second->getName() != getName()){
             for(auto const& j : i.second->m_rects){
                 for(auto const& h : m_rects){
                     if(SDL_HasIntersection(&j.second.rect,&h.second.rect)){

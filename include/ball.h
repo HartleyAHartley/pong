@@ -13,6 +13,7 @@ class Ball : public GameObject
         Ball(Game* g, int speed = 250);
         ~Ball();
         void Update();
+        fXY* GetDir(){return &m_dir;}
 
     protected:
         void collisionCB(GameObject * obj);
