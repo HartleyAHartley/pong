@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Pong" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Pong" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Wundef" />
+					<Add option="-Wfloat-equal" />
+					<Add option="-Winline" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-Wmissing-declarations" />
+					<Add option="-Wswitch-enum" />
+					<Add option="-Wzero-as-null-pointer-constant" />
+					<Add option="-Wmain" />
+					<Add option="-Wextra" />
+					<Add option="-Og" />
+					<Add option="-g" />
+					<Add directory="include" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Pong" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-fomit-frame-pointer" />
+					<Add option="-fexpensive-optimizations" />
+					<Add option="-O3" />
+					<Add directory="include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=c++14" />
+			<Add option="-m64" />
+			<Add directory="$(#sdl2.INCLUDE)" />
+			<Add directory="include" />
+		</Compiler>
+		<Linker>
+			<Add option="-m64" />
+			<Add option="-static-libstdc++" />
+			<Add option="-static-libgcc" />
+			<Add library="mingw32" />
+			<Add library="SDL2main" />
+			<Add library="SDL2.dll" />
+			<Add library="user32" />
+			<Add library="gdi32" />
+			<Add library="winmm" />
+			<Add library="dxguid" />
+			<Add directory="$(#sdl2.LIB)" />
+		</Linker>
+		<ExtraCommands>
+			<Add after="XCOPY $(#sdl2)\bin\*.dll $(TARGET_OUTPUT_DIR) /D /Y" />
+		</ExtraCommands>
+		<Unit filename="include/eventhandler.h" />
+		<Unit filename="include/fruit.h" />
+		<Unit filename="include/game.h" />
+		<Unit filename="include/gameboard.h" />
+		<Unit filename="include/gameerror.h" />
+		<Unit filename="include/gameobject.h" />
+		<Unit filename="include/main.h" />
+		<Unit filename="include/renderer.h" />
+		<Unit filename="include/Pong.h" />
+		<Unit filename="include/types.h" />
+		<Unit filename="src/eventhandler.cpp" />
+		<Unit filename="src/fruit.cpp" />
+		<Unit filename="src/game.cpp" />
+		<Unit filename="src/gameboard.cpp" />
+		<Unit filename="src/gameerror.cpp" />
+		<Unit filename="src/gameobject.cpp" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/renderer.cpp" />
+		<Unit filename="src/Pong.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
