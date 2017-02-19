@@ -2,30 +2,25 @@
 #include "game.h"
 #include "ball.h"
 
-PlayerPaddle::PlayerPaddle(Game* g, float yPos, int speed, SDL_Scancode up, SDL_Scancode down)
+PlayerPaddle::PlayerPaddle(const char* name, Game* g, bool ai, float yPos, int speed, SDL_Scancode up, SDL_Scancode down)
 {
-
     m_game = g;
-    m_upKey = up;
-    m_downKey = down;
     m_speed = speed;
-
-    name = "PlayerPaddle";
-    int sc[2] = {up, down};
-    for(int i = 0; i < 2; i++) {
-        m_KeyCB[i].callback = std::bind(&KeyCallBack, this, std::placeholders::_1);
-        m_KeyCB[i].sc = sc[i];
-        m_game->GeteventHandler()->RegisterKeyCallback(&m_KeyCB[i]);
+    m_name = name;
+    if(ai){
+        m_AI = true;
+        m_ball = m_game->GetGameObject("Ball");
+    } else {
+        m_upKey = up;
+        m_downKey = down;
+        m_AI = false;
+        int sc[2] = {up, down};
+        for(int i = 0; i < 2; i++) {
+            m_KeyCB[i].callback = std::bind(&KeyCallBack, this, std::placeholders::_1);
+            m_KeyCB[i].sc = sc[i];
+            m_game->GeteventHandler()->RegisterKeyCallback(&m_KeyCB[i]);
+        }
     }
-    CreatePaddle(yPos);
-}
-
-PlayerPaddle::PlayerPaddle(Game* g, std::shared_ptr<Ball> b, float yPos, int speed){
-    m_game = g;
-    m_speed = speed;
-    m_AI = true;
-    name = "AIPaddle";
-    m_ball = b;
     CreatePaddle(yPos);
 }
 
@@ -38,7 +33,7 @@ void PlayerPaddle::CreatePaddle(float yPos){
     paddle.r = 255;
     paddle.g = 255;
     paddle.b = 255;
-    m_rects[name] = paddle;
+    m_rects[m_name] = paddle;
     m_game->Getrenderer()->AddRectangle(&m_rects);
 }
 
@@ -49,26 +44,42 @@ PlayerPaddle::~PlayerPaddle()
 
 void PlayerPaddle::Update(){
     if(m_AI){
-        AIUpdate();
+        m_AITimer += m_game->getDTime();
+        if(m_AITimer > 0.0){
+            AIUpdate();
+            m_AITimer = 0;
+        }
+        if(m_dir.y != 0){
+            Move(m_dir*m_speed);
+            CheckBounds();
+        }
     }
 }
 
 void PlayerPaddle::AIUpdate(){
-    if(m_rects[name].rect.x-m_ball->getRect("Ball")->rect.x < m_game->GetW()/2 && m_ball->GetDir()->x > 0){
-        if(m_ball->getRect("Ball")->rect.y-(m_rects[name].rect.h/2)-(m_ball->getRect("Ball")->rect.h/2) > m_rects[name].rect.y){
-            Move(fXY(0,m_speed));
-        } else {
-            Move(fXY(0,-m_speed));
+    SDL_Rect* ball = &m_ball->getRect("Ball")->rect;
+    fXY* ballDir = (fXY*)m_ball->GetInfo();
+
+    if((m_rects[m_name].x < m_game->GetW()/2 && ballDir->x < 0) || (m_rects[m_name].x > m_game->GetW()/2 && ballDir->x > 0)){
+        if(ballDir->y > 0){
+            m_dir.y = 1;
+        } else if (ballDir->y < 0){
+            m_dir.y = -1;
         }
-        CheckBounds();
+        int ballPos = ball->y-(m_rects[m_name].rect.h/2)-(ball->h/2)-m_rects[m_name].rect.y;
+        if(m_dir.y == 1 && ballPos < 10){
+            m_dir.y = 0;
+        } else if(m_dir.y == -1 && ballPos > 10){
+            m_dir.y = 0;
+        }
     }
 }
 
 void PlayerPaddle::CheckBounds(){
-    if(m_rects[name].y > (m_game->GetH()-(m_rects[name].rect.h))){
-        m_rects[name].y = m_rects[name].rect.y = m_game->GetH()-(m_rects[name].rect.h);
-    } else if(m_rects[name].y < 0){
-        m_rects[name].y = m_rects[name].rect.y = 0;
+    if(m_rects[m_name].y > (m_game->GetH()-(m_rects[m_name].rect.h))){
+        m_rects[m_name].y = m_rects[m_name].rect.y = m_game->GetH()-(m_rects[m_name].rect.h);
+    } else if(m_rects[m_name].y < 0){
+        m_rects[m_name].y = m_rects[m_name].rect.y = 0;
     }
 }
 

@@ -98,7 +98,7 @@ public:
     /** Returns delta time
      * \return dTime
      */
-    double getDTime(){return dTime.count();};
+    double getDTime(){return dTime.count();}
     /** Returns grid size
      * \return m_grid
      */

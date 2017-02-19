@@ -4,7 +4,7 @@
 
 int main( int argc, char * argv[] ) {
 
-    Game * pong = new Game(1);
+    Game * pong = new Game(100);
     if(pong->InitError()) {
         return 1;
     }
@@ -12,7 +12,6 @@ int main( int argc, char * argv[] ) {
         pong->Step();
         pong->Draw();
         pong->DTime();
-        SDL_Delay(1);
     }
     return 0;
 }

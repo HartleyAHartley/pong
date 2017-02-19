@@ -17,9 +17,14 @@ Game::Game(float t, unsigned int w, unsigned int h, bool f) {
     }
     m_eventHandler = new EventHandler(this);
     m_eventHandler->Update();
-    m_gameobjects["PlayerPaddle"] = std::make_shared<PlayerPaddle>(this);
-    m_gameobjects["Ball"] = std::make_shared<Ball>(this);
-    m_gameobjects["AIPaddle"] = std::make_shared<PlayerPaddle>(this,m_gameobjects["Ball"]);
+
+    std::shared_ptr<GameObject> ball = std::make_shared<Ball>("Ball",this);
+    m_gameobjects["Ball"] = ball;
+
+    std::shared_ptr<GameObject> ai = std::make_shared<PlayerPaddle>("AIPaddle", this, true, 0.875);
+    m_gameobjects["AIPaddle"] = ai;
+    std::shared_ptr<GameObject> player = std::make_shared<PlayerPaddle>("AIPaddleTwo", this, true);
+    m_gameobjects["AIPaddleTwo"] = player;
 
     m_KeyCB.callback = std::bind(&close, this);
     m_KeyCB.keyDown = true;

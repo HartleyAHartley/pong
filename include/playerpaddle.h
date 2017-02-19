@@ -11,8 +11,7 @@ class Ball;
 class PlayerPaddle : public GameObject
 {
     public:
-        PlayerPaddle(Game* g, float yPos= 0.125f, int speed = 500, SDL_Scancode up=SDL_SCANCODE_W, SDL_Scancode down=SDL_SCANCODE_S);
-        PlayerPaddle(Game* g, std::shared_ptr<Ball> b, float yPos= 0.875f, int speed = 500);
+        PlayerPaddle(const char* name, Game* g, bool ai, float yPos= 0.125f, int speed = 500, SDL_Scancode up=SDL_SCANCODE_W, SDL_Scancode down=SDL_SCANCODE_S);
         ~PlayerPaddle();
         void KeyCallBack(int sc);
         void Update();
@@ -28,7 +27,9 @@ class PlayerPaddle : public GameObject
         void CreatePaddle(float yPos);
         void AIUpdate();
         void CheckBounds();
-        std::shared_ptr<Ball> m_ball;
+        float m_AITimer = 0;
+        XY m_dir = {};
+        std::shared_ptr<GameObject> m_ball;
 };
 
 #endif // PLAYERPADDLE_H

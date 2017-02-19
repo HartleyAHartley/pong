@@ -1,13 +1,19 @@
 #include "ball.h"
 #include "game.h"
 
-Ball::Ball(Game* g, int speed)
+Ball::Ball(const char* name, Game* g, int speed)
 {
-    name = "Ball";
+    m_name = name;
     m_speed = speed;
     m_game = g;
-    m_dir.x = -1;
-    m_dir.y = -0.5;
+
+    std::random_device rd;
+    std::mt19937 temp(rd());
+    mt = temp;
+    std::uniform_real_distribution<double> dist(-1.0, 1.0);
+    dir = dist;
+
+    RandomDir();
 
     renderRect ball;
     ball.rect.w = 10;
@@ -19,6 +25,11 @@ Ball::Ball(Game* g, int speed)
     ball.b = 255;
     m_rects[name] = ball;
     m_game->Getrenderer()->AddRectangle(&m_rects);
+}
+
+void Ball::RandomDir(){
+    m_dir.x = dir(mt);
+    m_dir.y = dir(mt);
 }
 
 Ball::~Ball()
@@ -35,13 +46,12 @@ void Ball::Update(){
 }
 
 void Ball::collisionCB(GameObject * obj){
-    std::cout<<std::endl<<obj->getName()<<std::endl;
     if(lastCollision != obj->getName()){
         SDL_Rect * player = &m_game->GetGameObject(obj->getName())->getRect(obj->getName())->rect;
-        int ballHeight = (m_rects[name].rect.y+(m_rects[name].rect.h/2))-player->y;
+        int ballHeight = (m_rects[m_name].rect.y+(m_rects[m_name].rect.h/2))-player->y;
         if(ballHeight > player->h+3){
             std::cout<<"Above: "<<ballHeight<<std::endl;
-            m_rects[name].rect.y = m_rects[name].y = player->y+player->h;
+            m_rects[m_name].rect.y = m_rects[m_name].y = player->y+player->h;
             if(m_dir.y > 0){
                 m_dir.y *=1.5;
             } else if(m_dir.y < 0){
@@ -49,7 +59,7 @@ void Ball::collisionCB(GameObject * obj){
             }
         } else if(ballHeight+3 < 0){
             std::cout<<"Below: "<<ballHeight<<std::endl;
-            m_rects[name].rect.y = m_rects[name].y = player->y-m_rects[name].rect.h;
+            m_rects[m_name].rect.y = m_rects[m_name].y = player->y-m_rects[m_name].rect.h;
             if(m_dir.y < 0){
                 m_dir.y *=1.5;
             } else if(m_dir.y > 0){
@@ -67,17 +77,17 @@ void Ball::collisionCB(GameObject * obj){
 }
 
 void Ball::WallCollsion(){
-    if(m_rects[name].y > (m_game->GetH()-(m_rects[name].rect.h))){
-        m_rects[name].y = m_rects[name].rect.y = m_game->GetH()-(m_rects[name].rect.h);
+    if(m_rects[m_name].y > (m_game->GetH()-(m_rects[m_name].rect.h))){
+        m_rects[m_name].y = m_rects[m_name].rect.y = m_game->GetH()-(m_rects[m_name].rect.h);
         m_dir.y *=-1;
-    } else if(m_rects[name].y < 0){
-        m_rects[name].y = m_rects[name].rect.y = 0;
+    } else if(m_rects[m_name].y < 0){
+        m_rects[m_name].y = m_rects[m_name].rect.y = 0;
         m_dir.y *=-1;
-    } else if(m_rects[name].x > (m_game->GetW()-(m_rects[name].rect.w))){
-        m_rects[name].x = m_rects[name].rect.x = m_game->GetW()-(m_rects[name].rect.w);
+    } else if(m_rects[m_name].x > (m_game->GetW()-(m_rects[m_name].rect.w))){
+        m_rects[m_name].x = m_rects[m_name].rect.x = m_game->GetW()-(m_rects[m_name].rect.w);
         m_dir.x *=-1;
-    } else if(m_rects[name].x < 0){
-        m_rects[name].x = m_rects[name].rect.x = 0;
+    } else if(m_rects[m_name].x < 0){
+        m_rects[m_name].x = m_rects[m_name].rect.x = 0;
         m_dir.x *=-1;
     }
 }

@@ -2,6 +2,7 @@
 #define BALL_H
 
 #include <string>
+#include <random>
 
 class Game;
 #include "gameobject.h"
@@ -10,10 +11,10 @@ class Game;
 class Ball : public GameObject
 {
     public:
-        Ball(Game* g, int speed = 250);
+        Ball(const char* name, Game* g, int speed = 250);
         ~Ball();
         void Update();
-        fXY* GetDir(){return &m_dir;}
+        void* GetInfo(){return &m_dir;}
 
     protected:
         void collisionCB(GameObject * obj);
@@ -22,7 +23,10 @@ class Ball : public GameObject
         int m_speed;
         fXY m_dir;
         void WallCollsion();
+        void RandomDir();
         std::string lastCollision = "";
+        std::mt19937 mt;
+        std::uniform_real_distribution<double> dir;
 };
 
 #endif // BALL_H

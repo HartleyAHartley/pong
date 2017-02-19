@@ -25,22 +25,6 @@ struct keyCallback {
     bool keyDown = false;
 };
 
-struct XY {
-    XY(){}
-    XY(int a, int b){
-        x = a;
-        y = b;
-    }
-    int x = 0;
-    int y = 0;
-    XY operator*(float a) const{
-        XY t;
-        t.x=x*a;
-        t.y=y*a;
-        return t;
-    }
-};
-
 struct fXY {
     fXY(){}
     fXY(float a, float b){
@@ -59,6 +43,25 @@ struct fXY {
         x=x*a;
         y=y*a;
         return this;
+    }
+};
+
+struct XY {
+    XY(){}
+    XY(int a, int b){
+        x = a;
+        y = b;
+    }
+    int x = 0;
+    int y = 0;
+    XY operator*(float a) const{
+        XY t;
+        t.x=x*a;
+        t.y=y*a;
+        return t;
+    }
+    operator fXY(){
+        return fXY(x,y);
     }
 };
 
