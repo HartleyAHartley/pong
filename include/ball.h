@@ -27,6 +27,8 @@ class Ball : public GameObject
         std::string lastCollision = "";
         std::mt19937 mt;
         std::uniform_real_distribution<double> dir;
+        void Reset();
+        void DirUpdate();
 };
 
 #endif // BALL_H

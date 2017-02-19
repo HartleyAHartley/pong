@@ -43,6 +43,20 @@ void Ball::Update(){
         lastCollision = "";
         WallCollsion();
     }
+    DirUpdate();
+}
+
+void Ball::DirUpdate(){
+    if(m_dir.x < -2){
+        m_dir.x = -2;
+    } else if(m_dir.x > 2){
+        m_dir.x = 2;
+    }
+    if(m_dir.y < -2){
+        m_dir.y = -2;
+    } else if(m_dir.y > 2){
+        m_dir.y = 2;
+    }
 }
 
 void Ball::collisionCB(GameObject * obj){
@@ -53,7 +67,7 @@ void Ball::collisionCB(GameObject * obj){
             std::cout<<"Above: "<<ballHeight<<std::endl;
             m_rects[m_name].rect.y = m_rects[m_name].y = player->y+player->h;
             if(m_dir.y > 0){
-                m_dir.y *=1.5;
+                m_dir.y *=1.1;
             } else if(m_dir.y < 0){
                 m_dir.y *=-1;
             }
@@ -70,10 +84,16 @@ void Ball::collisionCB(GameObject * obj){
             int distToMiddle =abs(ballHeight-(player->h/2))*2;
             std::cout<<"Dist: "<<distToMiddle<<std::endl;
             m_dir.x *=-1;
-            m_dir.y *= 0.5 + distToMiddle/100.f;
+            m_dir.y *= 1 + distToMiddle/100.f;
         }
     }
     lastCollision = obj->getName();
+}
+
+void Ball::Reset(){
+    m_rects[m_name].x = m_rects[m_name].rect.x = m_game->GetW()/2 - (m_rects[m_name].rect.w/2);
+    m_rects[m_name].y = m_rects[m_name].rect.y = m_game->GetH()/2 - (m_rects[m_name].rect.h/2);
+    RandomDir();
 }
 
 void Ball::WallCollsion(){
@@ -84,11 +104,9 @@ void Ball::WallCollsion(){
         m_rects[m_name].y = m_rects[m_name].rect.y = 0;
         m_dir.y *=-1;
     } else if(m_rects[m_name].x > (m_game->GetW()-(m_rects[m_name].rect.w))){
-        m_rects[m_name].x = m_rects[m_name].rect.x = m_game->GetW()-(m_rects[m_name].rect.w);
-        m_dir.x *=-1;
+        Reset();
     } else if(m_rects[m_name].x < 0){
-        m_rects[m_name].x = m_rects[m_name].rect.x = 0;
-        m_dir.x *=-1;
+        Reset();
     }
 }
 

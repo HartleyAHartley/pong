@@ -23,7 +23,7 @@ Game::Game(float t, unsigned int w, unsigned int h, bool f) {
 
     std::shared_ptr<GameObject> ai = std::make_shared<PlayerPaddle>("AIPaddle", this, true, 0.875);
     m_gameobjects["AIPaddle"] = ai;
-    std::shared_ptr<GameObject> player = std::make_shared<PlayerPaddle>("AIPaddleTwo", this, true);
+    std::shared_ptr<GameObject> player = std::make_shared<PlayerPaddle>("AIPaddleTwo", this, false);
     m_gameobjects["AIPaddleTwo"] = player;
 
     m_KeyCB.callback = std::bind(&close, this);

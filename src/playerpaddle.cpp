@@ -45,7 +45,7 @@ PlayerPaddle::~PlayerPaddle()
 void PlayerPaddle::Update(){
     if(m_AI){
         m_AITimer += m_game->getDTime();
-        if(m_AITimer > 0.0){
+        if(m_AITimer > 0.025){
             AIUpdate();
             m_AITimer = 0;
         }
