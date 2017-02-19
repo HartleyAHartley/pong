@@ -1,2 +1,2 @@
-# Snake
-### A technical demo of Snake for an example SDL2 Engine
+# Pong
+### A technical demo of Pong for an example SDL2 Engine
